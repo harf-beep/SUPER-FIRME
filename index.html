@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIRME - Organiza tu Vida</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #1E90FF, #B22222), url('https://via.placeholder.com/1920x1080?text=Libros+y+Estudios+Fondo') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        transition: all 0.5s;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    h1 {
+        font-size: 4em;
+        color: #FFD700;
+        text-shadow: 2px 2px 4px #000;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    p {
+        font-size: 1.5em;
+        color: #FFF;
+    }
+    button {
+        background-color: #B22222;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 10px;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background-color: #1E90FF;
+    }
+    .sections {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 50px;
+    }
+    .section {
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .full-width {
+        grid-column: span 2;
+    }
+    .path {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        height: 200px;
+        background: linear-gradient(to right, #B22222, #1E90FF);
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .path::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: #FFD700;
+        z-index: 0;
+    }
+    .step {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 50%;
+        width: 150px;
+        text-align: center;
+        z-index: 1;
+        position: relative;
+    }
+    textarea {
+        width: 100%;
+        height: 80px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        resize: none;
+    }
+    .task-list p {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+    }
+    .mural {
+        height: 400px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 2px dashed #FFD700;
+        position: relative;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+    .mural img {
+        max-width: 150px;
+        margin: 10px;
+        border-radius: 5px;
+        transition: transform 0.3s;
+    }
+    .mural p {
+        position: absolute;
+        color: #FFD700;
+        font-size: 1.2em;
+        cursor: pointer;
+    }
+    .finance {
+        display: flex;
+        justify-content: space-between;
+    }
+    .finance div {
+        width: 45%;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+    }
+    footer {
+        margin-top: 50px;
+        font-size: 0.8em;
+        color: #CCC;
+    }
+    @media (max-width: 768px) {
+        .sections {
+            grid-template-columns: 1fr;
+        }
+        .full-width {
+            grid-column: span 1;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div id="main-page">
+            <h1>FIRME</h1>
+            <p>Una página web para organizar tu vida</p>
+            <button onclick="showSections()">Entrar a las Secciones</button>
+        </div>
+        
+        <div id="sections" class="sections">
+            <!-- Primera Sección: Camino Firme -->
+            <div class="section full-width">
+                <h2>Camino Firme</h2>
+                <p>Planifica tu vida en un camino visual.</p>
+                <div class="path">
+                    <div class="step" id="short-step">
+                        <h3>Corto Plazo (Cerca)</h3>
+                        <textarea id="short-term" placeholder="Planes a corto plazo..."></textarea>
+                    </div>
+                    <div class="step" id="mid-step">
+                        <h3>Mediano Plazo (Medio)</h3>
+                        <textarea id="mid-term" placeholder="Planes a mediano plazo..."></textarea>
+                    </div>
+                    <div class="step" id="long-step">
+                        <h3>Largo Plazo (Lejos)</h3>
+                        <textarea id="long-term" placeholder="Planes a largo plazo..."></textarea>
+                    </div>
+                </div>
+                <button onclick="savePlans()">Guardar Planes</button>
+            </div>
+            
+            <!-- Segunda Sección: Tareas -->
+            <div class="section">
+                <h2>Tareas</h2>
+                <p>Calendario de tareas con límites de tiempo.</p>
+                <input type="text" id="task-name" placeholder="Nombre de la tarea">
+                <input type="date" id="task-deadline">
+                <button onclick="addTask()">Agregar Tarea</button>
+                <div class="task-list" id="task-list"></div>
+            </div>
+            
+            <!-- Tercera Sección: Mural de Motivación -->
+            <div class="section full-width">
+                <h2>Mural de Motivación</h2>
+                <p>Haz clic en el mural para agregar frases. Sube imágenes y rótalas.</p>
+                <input type="file" id="image-upload" accept="image/*">
+                <button onclick="addImage()">Agregar Imagen</button>
+                <button onclick="rotateImages()">Rotar Imágenes</button>
+                <input type="text" id="phrase" placeholder="Frase motivadora">
+                <button onclick="addPhrase()">Agregar Frase</button>
+                <div class="mural" id="mural" onclick="addPhraseAtClick(event)"></div>
+            </div>
+            
+            <!-- Cuarta Sección: Ganancias y Pérdidas -->
+            <div class="section">
+                <h2>Ganancias y Pérdidas</h2>
+                <p id="motivational-quote"></p>
+                <p>Monto Total: $<span id="total-amount">0</span></p>
+                <div class="finance">
+                    <div>
+                        <h3>Ganancias</h3>
+                        <input type="number" id="gain-amount" placeholder="Monto">
+                        <input type="text" id="gain-reason" placeholder="Motivo">
+                        <button onclick="addGain()">Agregar Ganancia</button>
+                    </div>
+                    <div>
+                        <h3>Pérdidas</h3>
+                        <input type="number" id="loss-amount" placeholder="Monto">
+                        <input type="text" id="loss-reason" placeholder="Motivo">
+                        <button onclick="addLoss()">Agregar Pérdida</button>
+                    </div>
+                </div>
+                <div id="transaction-history"></div>
+            </div>
+        </div>
+        
+        <button id="back-btn" onclick="backToMain()" style="display:none;">Volver a Inicio</button>
+        <footer>
+            Creado por Harol - <a href="https://github.com/tuusuario/firme" target="_blank">Ver en GitHub</a>
+        </footer>
+    </div>
+    <script>
+    // Función para mostrar secciones
+    function showSections() {
+        document.getElementById('main-page').style.display = 'none';
+        document.getElementById('sections').style.display = 'grid';
+        document.getElementById('back-btn').style.display = 'block';
+        loadData();
+        generateQuote();
+        checkTasks();
+    }
+
+    function backToMain() {
+        document.getElementById('sections').style.display = 'none';
+        document.getElementById('main-page').style.display = 'block';
+        document.getElementById('back-btn').style.display = 'none';
+    }
+
+    // Frase motivadora diaria (10 frases)
+    const quotes = [
+        "¡Cada día es una nueva oportunidad!",
+        "La organización es la clave del éxito.",
+        "Mantén el foco en tus metas.",
+        "¡Tú puedes lograrlo todo!",
+        "El camino al éxito está pavimentado con disciplina.",
+        "Motívate con tus sueños, no con tus miedos.",
+        "Pequeños pasos llevan a grandes cambios.",
+        "La paciencia es el puente hacia el éxito.",
+        "¡Hoy es el día perfecto para empezar!",
+        "Tu futuro depende de lo que hagas hoy."
+    ];
+    function generateQuote() {
+        const today = new Date().toDateString();
+        const lastQuoteDate = localStorage.getItem('quoteDate');
+        if (lastQuoteDate !== today) {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('motivational-quote').textContent = quote;
+            localStorage.setItem('quoteDate', today);
+            localStorage.setItem('currentQuote', quote);
+        } else {
+            document.getElementById('motivational-quote').textContent = localStorage.getItem('currentQuote');
+        }
+    }
+
+    // Camino Firme: Guardar planes
+    function savePlans() {
+        localStorage.setItem('short-term', document.getElementById('short-term').value);
+        localStorage.setItem('mid-term', document.getElementById('mid-term').value);
+        localStorage.setItem('long-term', document.getElementById('long-term').value);
+        alert('Planes guardados en el camino!');
+    }
+
+    // Tareas: Agregar, mostrar y chequear
+    function addTask() {
+        const name = document.getElementById('task-name').value;
+        const deadline = document.getElementById('task-deadline').value;
+        if (name && deadline) {
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            tasks.push({ name, deadline, completed: false });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            displayTasks();
+            document.getElementById('task-name').value = '';
+            document.getElementById('task-deadline').value = '';
+        }
+    }
+    function displayTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        const list = document.getElementById('task-list');
+        list.innerHTML = '';
+        tasks.forEach((task, index) => {
+            list.innerHTML += `<p>${task.name} - Límite: ${task.deadline} <button onclick="completeTask(${index})">Completar</button></p>`;
+        });
+    }
+    function completeTask(index) {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        tasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        displayTasks();
+    }
+    function checkTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        tasks.forEach(task => {
+            if (task.deadline < today && !task.completed) {
+                alert(`¡Tarea vencida: ${task.name}! Revisa tus prioridades.`);
+            }
+        });
+    }
+
+    // Mural: Agregar imágenes, frases y rotar
+    function addImage() {
+        const file = document.getElementById('image-upload').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const mural = document.getElementById('mural');
+                mural.innerHTML += `<img src="${e.target.result}" alt="Imagen subida" class="rotatable">`;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    function rotateImages() {
+        const images = document.querySelectorAll('.rotatable');
+        images.forEach(img => {
+            const currentRotation = img.style.transform || 'rotate(0deg)';
+            const newRotation = currentRotation === 'rotate(0deg)' ? 'rotate(90deg)' : 'rotate(0deg)';
+            img.style.transform = newRotation;
+        });
+    }
+    function addPhrase() {
+        const phrase = document.getElementById('phrase').value;
+        if (phrase) {
+            const mural = document.getElementById('mural');
+            mural.innerHTML += `<p style="top: ${Math.random() * 300}px; left: ${Math.random() * 500}px;">${phrase}</p>`;
+            document.getElementById('phrase').value = '';
+        }
+    }
+    function addPhraseAtClick(event) {
+        const phrase = document.getElementById('phrase').value;
+        if (phrase) {
+            const mural = document.getElementById('mural');
+            mural.innerHTML += `<p style="top: ${event.offsetY}px; left: ${event.offsetX}px;">${phrase}</p>`;
+            document.getElementById('phrase').value = '';
+        }
+    }
+
+    // Finanzas: Agregar ganancias/pérdidas, historial y alertas
+    let total = 0;
+    let weeklyLoss = 0;
+    function addGain() {
+        const amount = parseFloat(document.getElementById('gain-amount').value);
+        const reason = document.getElementById('gain-reason').value;
+        if (amount && reason) {
+            total += amount;
+            addToHistory(`Ganancia: +$${amount} - ${reason}`);
+            updateTotal();
+            document.getElementById('gain-amount').value = '';
+            document.getElementById('gain-reason').value = '';
+        }
+    }
+    function addLoss() {
+        const amount = parseFloat(document.getElementById('loss-amount').value);
+        const reason = document.getElementById('loss-reason').value;
+        if (amount && reason) {
+            total -= amount;
+            weeklyLoss += amount;
+            if (weeklyLoss > 500) alert('¡Estás gastando demasiado esta semana! Revisa tus finanzas.');
+            addToHistory(`Pérdida: -$${amount} - ${reason}`);
+            updateTotal();
+            document.getElementById('loss-amount').value = '';
+            document.getElementById('loss-reason').value = '';
+        }
+    }
+    function addToHistory(entry) {
+        const
+<script>
+    // Función para mostrar secciones
+    function showSections() {
+        document.getElementById('main-page').style.display = 'none';
+        document.getElementById('sections').style.display = 'grid';
+        document.getElementById('back-btn').style.display = 'block';
+        loadData();
+        generateQuote();
+        checkTasks();
+    }
+
+    function backToMain() {
+        document.getElementById('sections').style.display = 'none';
+        document.getElementById('main-page').style.display = 'block';
+        document.getElementById('back-btn').style.display = 'none';
+    }
+
+    // Frase motivadora diaria (10 frases)
+    const quotes = [
+        "¡Cada día es una nueva oportunidad!",
+        "La organización es la clave del éxito.",
+        "Mantén el foco en tus metas.",
+        "¡Tú puedes lograrlo todo!",
+        "El camino al éxito está pavimentado con disciplina.",
+        "Motívate con tus sueños, no con tus miedos.",
+        "Pequeños pasos llevan a grandes cambios.",
+        "La paciencia es el puente hacia el éxito.",
+        "¡Hoy es el día perfecto para empezar!",
+        "Tu futuro depende de lo que hagas hoy."
+    ];
+    function generateQuote() {
+        const today = new Date().toDateString();
+        const lastQuoteDate = localStorage.getItem('quoteDate');
+        if (lastQuoteDate !== today) {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('motivational-quote').textContent = quote;
+            localStorage.setItem('quoteDate', today);
+            localStorage.setItem('currentQuote', quote);
+        } else {
+            document.getElementById('motivational-quote').textContent = localStorage.getItem('currentQuote');
+        }
+    }
+
+    // Camino Firme: Guardar planes
+    function savePlans() {
+        localStorage.setItem('short-term', document.getElementById('short-term').value);
+        localStorage.setItem('mid-term', document.getElementById('mid-term').value);
+        localStorage.setItem('long-term', document.getElementById('long-term').value);
+        alert('Planes guardados en el camino!');
+    }
+
+    // Tareas: Agregar, mostrar y chequear
+    function addTask() {
+        const name = document.getElementById('task-name').value;
+        const deadline = document.getElementById('task-deadline').value;
+        if (name && deadline) {
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            tasks.push({ name, deadline, completed: false });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            displayTasks();
+            document.getElementById('task-name').value = '';
+            document.getElementById('task-deadline').value = '';
+        }
+    }
+    function displayTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        const list = document.getElementById('task-list');
+        list.innerHTML = '';
+        tasks.forEach((task, index) => {
+            list.innerHTML += `<p>${task.name} - Límite: ${task.deadline} <button onclick="completeTask(${index})">Completar</button></p>`;
+        });
+    }
+    function completeTask(index) {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        tasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        displayTasks();
+    }
+    function checkTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        tasks.forEach(task => {
+            if (task.deadline < today && !task.completed) {
+                alert(`¡Tarea vencida: ${task.name}! Revisa tus prioridades.`);
+            }
+        });
+    }
+
+    // Mural: Agregar imágenes, frases y rotar
+    function addImage() {
+        const file = document.getElementById('image-upload').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const mural = document.getElementById('mural');
+                mural.innerHTML += `<img src="${e.target.result}" alt="Imagen subida" class="rotatable">`;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    function rotateImages() {
+        const images = document.querySelectorAll('.rotatable');
+        images.forEach(img => {
+            const currentRotation = img.style.transform || 'rotate(0deg)';
+            const newRotation = currentRotation === 'rotate(0deg)' ? 'rotate(90deg)' : 'rotate(0deg)';
+            img.style.transform = newRotation;
+        });
+    }
+    function addPhrase() {
+        const phrase = document.getElementById('phrase').value;
+        if (phrase) {
+            const mural = document.getElementById('mural');
+            mural.innerHTML += `<p style="top: ${Math.random() * 300}px; left: ${Math.random() * 500}px;">${phrase}</p>`;
+            document.getElementById('phrase').value = '';
+        }
+    }
+    function addPhraseAtClick(event) {
+        const phrase = document.getElementById('phrase').value;
+        if (phrase) {
+            const mural = document.getElementById('mural');
+            mural.innerHTML += `<p style="top: ${event.offsetY}px; left: ${event.offsetX}px;">${phrase}</p>`;
+            document.getElementById('phrase').value = '';
+        }
+    }
+
+    // Finanzas: Agregar ganancias/pérdidas, historial y alertas
+    let total = 0;
+    let weeklyLoss = 0;
+    function addGain() {
+        const amount = parseFloat(document.getElementById('gain-amount').value);
+        const reason = document.getElementById('gain-reason').value;
+        if (amount && reason) {
+            total += amount;
+            addToHistory(`Ganancia: +$${amount} - ${reason}`);
+            updateTotal();
+            document.getElementById('gain-amount').value = '';
+            document.getElementById('gain-reason').value = '';
+        }
+    }
+    function addLoss() {
+        const amount = parseFloat(document.getElementById('loss-amount').value);
+        const reason = document.getElementById('loss-reason').value;
+        if (amount && reason) {
+            total -= amount;
+            weeklyLoss += amount;
+            if (weeklyLoss > 500) alert('¡Estás gastando demasiado esta semana! Revisa tus finanzas.');
+            addToHistory(`Pérdida: -$${amount} - ${reason}`);
+            updateTotal();
+            document.getElementById('loss-amount').value = '';
+            document.getElementById('loss-reason').value = '';
+        }
+    }
+    function addToHistory(entry) {
+        const history = JSON.parse(localStorage.getItem('history') || '[]');
+        history.push(entry);
+        localStorage.setItem('history', JSON.stringify(history));
+        displayHistory();
+    }
+    function displayHistory() {
+        const history = JSON.parse(localStorage.getItem('history') || '[]');
+        const histDiv = document.getElementById('transaction-history');
+        histDiv.innerHTML = '<h3>Historial de Transacciones</h3>';
+        history.forEach(item => {
+            histDiv.innerHTML += `<p>${item}</p>`;
+        });
+    }
+    function updateTotal() {
+        document.getElementById('total-amount').textContent = total;
+        localStorage.setItem('total', total);
+    }
+
+    // Cargar datos al inicio
+    function loadData() {
+        document.getElementById('short-term').value = localStorage.getItem('short-term') || '';
+        document.getElementById('mid-term').value = localStorage.getItem('mid-term') || '';
+        document.getElementById('long-term').value = localStorage.getItem('long-term') || '';
+        displayTasks();
+        displayHistory();
+        total = parseFloat(localStorage.getItem('total') || '0');
+        updateTotal();
+    }
+</script>
+</body>
+</html>
